@@ -2,7 +2,6 @@ package application;
 
 import java.awt.*;
 import java.util.*;
-import java.util.logging.Logger;
 
 public class Environnement extends Observable implements Runnable{
 
@@ -47,7 +46,7 @@ public class Environnement extends Observable implements Runnable{
         return grille;
     }
 
-    public void deplacerAgent(Agent a){
+    public void deplacerAgentAleatoirement(Agent a){
         int newi, newj;
 
         Point pos = getPos(a);
@@ -90,16 +89,18 @@ public class Environnement extends Observable implements Runnable{
         return emplacements;
     }
 
-    public void run(int nbIterations){
+    public void run(int nbIterations) throws InterruptedException {
+        int updateIter = 100;
         for (int i = 0; i < nbIterations; i++) {
-            System.out.println(i);
             for (Agent a : agents){
                 a.update();
             }
-            setChanged();
-            notifyObservers();
+            if (i%updateIter == 0) {
+                setChanged();
+                notifyObservers();
+                Thread.sleep(1);
+            }
         }
-        System.out.println(grille);
     }
 
     public Point getPos(Agent a) {
@@ -111,24 +112,6 @@ public class Environnement extends Observable implements Runnable{
             }
         }
         return null;
-    }
-
-    public void check() {
-        int nbA, nbB;
-        nbA =nbB = 0;
-        for (int i =0 ; i< sizeX; i++){
-            for (int j = 0; j< sizeY; j++) {
-                if (monde[i][j] != null){
-                    if (monde[i][j].getType().equals(Objet.Type.A)) {
-                        nbA++;
-                    }
-                    if (monde[i][j].getType().equals(Objet.Type.B)) {
-                        nbB++;
-                    }
-                }
-            }
-        }
-        System.out.println("Nb A : " + nbA + " | nbB : " + nbB);
     }
 
     public String toString() {
@@ -150,7 +133,11 @@ public class Environnement extends Observable implements Runnable{
 
     @Override
     public void run() {
-        this.run(this.nbIteration);
+        try {
+            this.run(this.nbIteration);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
     public void start() {
         new Thread(this).start();

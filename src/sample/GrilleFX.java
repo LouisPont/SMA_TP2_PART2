@@ -4,7 +4,6 @@ import application.Agent;
 import application.Environnement;
 import application.Grille;
 import application.Objet;
-import javafx.scene.Parent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -42,13 +41,12 @@ public class GrilleFX extends GridPane {
                 this.recs[i][j] = rec;
                 rec.setHeight(this.sizeRecM);
                 rec.setWidth(this.sizeRecN);
-                if (emplacements[i][j] != null) {
-                    rec.setStrokeType(StrokeType.INSIDE);
-                    rec.setStroke(Color.BLACK);
-                } else {
-                    rec.setStrokeType(StrokeType.INSIDE);
-                    rec.setStroke(Color.TRANSPARENT);
-                }
+//                rec.setStrokeType(StrokeType.INSIDE);
+//                if (emplacements[i][j] != null) {
+//                    rec.setStroke(Color.BLACK);
+//                } else {
+//                    rec.setStroke(Color.BEIGE);
+//                }
                 if (monde[i][j] != null){
                     if (this.monde[i][j].getType().equals(Objet.Type.A)) {
                         rec.setFill(Color.BLUE);
@@ -66,11 +64,12 @@ public class GrilleFX extends GridPane {
     public void update(){
         for (int i=0; i<N; i++) {
             for (int j = 0; j < M; j++) {
-                if (emplacements[i][j] != null) {
-                    recs[i][j].setStroke(Color.BLACK);
-                } else {
-                    recs[i][j].setStroke(Color.TRANSPARENT);
-                }
+                recs[i][j].setStrokeType(StrokeType.INSIDE);
+//                if (emplacements[i][j] != null) {
+//                    recs[i][j].setStroke(Color.BLACK);
+//                } else {
+//                    recs[i][j].setStroke(Color.BEIGE);
+//                }
                 if (monde[i][j] != null){
                     if (this.monde[i][j].getType().equals(Objet.Type.A)) {
                         recs[i][j].setFill(Color.BLUE);

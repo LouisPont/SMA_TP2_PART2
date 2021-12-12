@@ -14,9 +14,9 @@ import java.util.Observer;
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
-        Grille grille = new Grille(100,100,500);
-        Environnement environnement = new Environnement(grille, 20, 150000);
+    public void start(Stage primaryStage) {
+        Grille grille = new Grille(50,50,200);
+        Environnement environnement = new Environnement(grille, 20, 500_000);
         GrilleFX grillefx = new GrilleFX(environnement);
 
         Observer o = (o1, arg) -> grillefx.update();

@@ -1,6 +1,5 @@
 package application;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -12,7 +11,7 @@ public class Agent {
     private boolean porte;
     private Objet obj;
     private final LinkedList<String> memoire;
-    private static final float K_PLUS = 0.1f;
+    private static final float K_PLUS = 0.9f;
     private static final float K_MOINS= 0.3f;
     private static final int SIZE_MEMORY= 10;
     private static final float ERROR= 0.1f;
@@ -47,7 +46,7 @@ public class Agent {
                 deposerObjet();
                 env.deposerObjet(this, objTenu);
             } else {
-                env.deplacerAgent(this);
+                env.deplacerAgentAleatoirement(this);
             }
         } else if (!porte && objSol != null){
             float proba = rand.nextFloat();
@@ -55,10 +54,10 @@ public class Agent {
                 ramasserObjet(objSol);
                 env.removeObject(this);
             } else {
-                env.deplacerAgent(this);
+                env.deplacerAgentAleatoirement(this);
             }
         } else {
-            env.deplacerAgent(this);
+            env.deplacerAgentAleatoirement(this);
         }
     }
 
@@ -66,12 +65,7 @@ public class Agent {
         Perception p = env.getPerception(this);
         action(p);
         if (p.getObj() != null) {
-            float erreur = rand.nextFloat();
-            if (erreur <= ERROR) {
-                updateMemoire(Objet.Type.swap(p.getObj().getType()));
-            } else {
-                updateMemoire(p.getObj().getType());
-            }
+            updateMemoire(p.getObj().getType());
         } else {
             updateMemoire(null);
         }
@@ -84,9 +78,43 @@ public class Agent {
         memoire.add( objet == null ? "0" : objet.name());
     }
 
+    public int getFrequency(Objet obj, LinkedList<String> list) {
+        int counter = 0;
+        for (String elem : list) {
+            if (elem.equals(obj.getType().name())) {
+                counter ++;
+            }
+        }
+        return counter;
+    }
+
+    public int getFrequencyInverse(Objet obj, LinkedList<String> list) {
+        int counter = 0;
+        for (String elem : list) {
+            if (!elem.equals(obj.getType().name()) && !elem.equals("0") ) {
+                counter ++;
+            }
+        }
+        return  counter;
+    }
+
+    public double getFERROR(Objet obj) {
+        int ft = getFrequency(obj, memoire);
+        int ftB = getFrequencyInverse(obj, memoire);
+        return ( ft + ftB * ERROR) / memoire.size();
+    }
+
     public double getProbabilitePrendre(Objet obj){
-        double f = (double) Collections.frequency(memoire, obj.getType().name()) / memoire.size();
+        double f = getFERROR(obj);
         return Math.pow((K_PLUS / (K_PLUS + f)),2);
+    }
+
+    public double getProbabiliteLaisse(){
+        if (this.obj != null) {
+            double f = getFERROR(obj);
+            return Math.pow((f/(K_MOINS+f)),2);
+        }
+        return 0.d;
     }
 
     public void ramasserObjet(Objet obj){
@@ -103,11 +131,5 @@ public class Agent {
         return this.obj;
     }
 
-    public double getProbabiliteLaisse(){
-        if (this.obj != null) {
-            double f = (double) Collections.frequency(memoire, this.obj.getType().name()) / memoire.size();
-            return Math.pow((f/(K_MOINS+f)),2);
-        }
-        return 0.d;
-    }
+
 }
