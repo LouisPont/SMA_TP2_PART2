@@ -86,27 +86,20 @@ public class Environnement extends Observable implements Runnable{
         monde[pos.x][pos.y] = obj;
     }
 
+    public Agent[][] getEmplacements() {
+        return emplacements;
+    }
+
     public void run(int nbIterations){
-        System.out.println(grille);
         for (int i = 0; i < nbIterations; i++) {
+            System.out.println(i);
             for (Agent a : agents){
                 a.update();
             }
             setChanged();
             notifyObservers();
-
-            try {
-                synchronized(this){
-                    Thread.sleep(40);
-                }
-            } catch (InterruptedException ex) {
-                System.out.printf(ex.getMessage());
-            }
-
         }
-
         System.out.println(grille);
-        check();
     }
 
     public Point getPos(Agent a) {

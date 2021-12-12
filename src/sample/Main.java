@@ -15,14 +15,14 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Grille grille = new Grille(50,50,600_000);
-        Environnement environnement = new Environnement(grille, 20, 100);
+        Grille grille = new Grille(100,100,500);
+        Environnement environnement = new Environnement(grille, 20, 150000);
         GrilleFX grillefx = new GrilleFX(environnement);
 
         Observer o = (o1, arg) -> grillefx.update();
 
         environnement.addObserver(o);
-        environnement.start();
+
 
         primaryStage.setTitle("SMA");
         primaryStage.setResizable(false);
@@ -37,6 +37,7 @@ public class Main extends Application {
         });
 
         grillefx.requestFocus();
+        environnement.start();
     }
 
 
