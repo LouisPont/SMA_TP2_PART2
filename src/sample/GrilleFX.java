@@ -1,9 +1,6 @@
 package sample;
 
-import application.Agent;
-import application.Environnement;
-import application.Grille;
-import application.Objet;
+import application.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -14,7 +11,6 @@ public class GrilleFX extends GridPane {
     private final Grille grille;
     private final Objet[][] monde;
     private final Rectangle[][] recs;
-    private final Agent[][] emplacements;
     private final int N;
     private final int M;
     private final int sizeRecN;
@@ -24,7 +20,6 @@ public class GrilleFX extends GridPane {
         super();
         this.grille = env.getGrille();
         this.monde = this.grille.getMonde();
-        this.emplacements = env.getEmplacements();
         this.N = grille.getN();
         this.M = grille.getM();
         this.recs = new Rectangle[N][M];
@@ -41,17 +36,13 @@ public class GrilleFX extends GridPane {
                 this.recs[i][j] = rec;
                 rec.setHeight(this.sizeRecM);
                 rec.setWidth(this.sizeRecN);
-//                rec.setStrokeType(StrokeType.INSIDE);
-//                if (emplacements[i][j] != null) {
-//                    rec.setStroke(Color.BLACK);
-//                } else {
-//                    rec.setStroke(Color.BEIGE);
-//                }
                 if (monde[i][j] != null){
                     if (this.monde[i][j].getType().equals(Objet.Type.A)) {
                         rec.setFill(Color.BLUE);
                     } else if (this.monde[i][j].getType().equals(Objet.Type.B)) {
                         rec.setFill(Color.RED);
+                    } else if (this.monde[i][j].getType().equals(Objet.Type.C)) {
+                        rec.setFill(Color.PURPLE);
                     }
                 } else {
                     rec.setFill(Color.BEIGE);
@@ -65,16 +56,13 @@ public class GrilleFX extends GridPane {
         for (int i=0; i<N; i++) {
             for (int j = 0; j < M; j++) {
                 recs[i][j].setStrokeType(StrokeType.INSIDE);
-//                if (emplacements[i][j] != null) {
-//                    recs[i][j].setStroke(Color.BLACK);
-//                } else {
-//                    recs[i][j].setStroke(Color.BEIGE);
-//                }
                 if (monde[i][j] != null){
                     if (this.monde[i][j].getType().equals(Objet.Type.A)) {
                         recs[i][j].setFill(Color.BLUE);
                     } else if (this.monde[i][j].getType().equals(Objet.Type.B)) {
                         recs[i][j].setFill(Color.RED);
+                    } else if (this.monde[i][j].getType().equals(Objet.Type.C)) {
+                        recs[i][j].setFill(Color.PURPLE);
                     }
                 } else {
                     recs[i][j].setFill(Color.BEIGE);

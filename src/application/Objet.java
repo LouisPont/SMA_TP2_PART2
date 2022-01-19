@@ -17,7 +17,8 @@ public class Objet {
 
     public enum Type {
         A,
-        B;
+        B,
+        C;
 
         public static Type swap(Type initial) {
             Type label;
